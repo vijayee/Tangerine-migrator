@@ -1,0 +1,19 @@
+{
+  "undef"         : true,
+  "unused"        : "strict",
+  "strict"        : true,
+  "curly"         : true,
+  "newcap"        : true,
+  "es5"           : true,
+  "indent"        : 2,
+  "maxparams"     : 3,
+  "maxparams"     : 3,
+  "maxdepth"      : 5,
+  "maxstatements" : 25,
+  "maxcomplexity" : 5,
+  "quotmark"      : "single",
+  "node"          : true,
+  "devel"         : true,
+  "predef"        : []
+}
+

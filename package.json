@@ -1,0 +1,15 @@
+{
+  "name": "migrator",
+  "version": "0.0.0",
+  "description": "Utility for migrating Tangerine's CouchDB documents.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "author": "Also Engineering",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "node-uuid": "^1.4.7",
+    "unirest": "^0.4.2"
+  }
+}
