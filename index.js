@@ -125,10 +125,7 @@ var doGroup = function() {
             var localGroupPath = 'g-' + groupName;
 
             unirest.put('http://localhost:5984/')
-              .headers({
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-              })
+              .headers(JSON_HEADERS)
               .auth(process.env.T_ADMIN, process.env.T_PASS)
               .end(function (response) {
 
