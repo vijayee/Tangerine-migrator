@@ -9,7 +9,9 @@
   "author": "Also Engineering",
   "license": "GPL-3.0",
   "dependencies": {
+    "base62sequence": "0.0.2",
     "node-uuid": "^1.4.7",
+    "underscore": "^1.8.3",
     "unirest": "^0.4.2"
   }
 }

@@ -9,15 +9,17 @@
 
 // constructor
 // set up some defaults.
-var CouchMigrator = function() {
+var CouchMigrator = function(opts) {
 
   this.docs = [];
   this.current = [];
   this.transforms = [];
   this.resultTransforms = {};
   this.collectionTransforms = {};
+  this.batchTransforms= [];
   this.oldVersion = '';
   this.newVersion = '';
+  this.opts= opts || {};
 
   return this;
 
@@ -36,6 +38,11 @@ CouchMigrator.prototype.addTransform = function(transform) {
   return this;
 };
 
+// add a transformation
+CouchMigrator.prototype.addBatchTransform = function(transform) {
+    this.batchTransforms.push(transform);
+    return this;
+};
 
 // 
 CouchMigrator.prototype.addCollectionTransform = function(c, transform) {
@@ -87,14 +94,14 @@ CouchMigrator.prototype.process = function() {
 
     // run every top level transform on every doc
     this.transforms.forEach( function(transform, tI) {
-      this.docs[dI] = transform(doc);
+      this.docs[dI] = transform(doc, this.opts);
     }, this); // top level transforms
 
 
     // collection level transforms
     var collectionTransforms = this.collectionTransforms[doc.collection] || [];
     collectionTransforms.forEach( function(transform, cI){
-      this.docs[dI] = transform(doc);
+      this.docs[dI] = transform(doc, this.opts);
     }, this);
 
 
@@ -106,7 +113,7 @@ CouchMigrator.prototype.process = function() {
         // if transforms exist for this protoResult
         var resultTransforms = ( this.resultTransforms[protoResult.prototype] || []);
         resultTransforms.forEach( function(transform){
-          arr[sI] = transform(protoResult);
+          arr[sI] = transform(protoResult, this.opts);
         });
 
       }, this);
@@ -121,6 +128,13 @@ CouchMigrator.prototype.process = function() {
   return this;
 
 };
+
+CouchMigrator.prototype.processBatches = function() {
+    this.batchTransforms.forEach(function(transform){
+        transform(this.docs);
+    }, this);
+    return this;
+}
 
 
 CouchMigrator.prototype.done = function(callback) {

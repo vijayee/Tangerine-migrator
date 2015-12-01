@@ -19,6 +19,11 @@ var participantId = require('./transforms/participantId');
 var version       = require('./transforms/version');
 var surveyValues  = require('./transforms/surveyValues');
 var classResult   = require('./transforms/classResult');
+var sequenceId   = require('./transforms/sequenceId');
+var Sequence = require('base62sequence');
+var opts={};
+opts.sequence= new Sequence(0);
+opts.mapping= {};
 
 var JSON_HEADERS = {
   'Accept'       : 'application/json',
@@ -104,11 +109,12 @@ var doGroup = function() {
 
         beforeDocSize += JSON.stringify(docs).length;
 
-        var migrator = new CouchMigrator();
+        var migrator = new CouchMigrator(opts);
         migrator
           .addDocs(docs)
           .versions(OLD_VERSION, NEW_VERSION)
           .addTransform(classResult)
+          .addBatchTransform(sequenceId)
           .addCollectionTransform('result', startTime)
           .addCollectionTransform('result', orderMap)
           .addCollectionTransform('result', version)
@@ -118,6 +124,7 @@ var doGroup = function() {
           .addResultTransform('grid', gridValues)
           .addResultTransform('survey', surveyValues)
           .process()
+          .processBatches()
           .done(function(docs){
 
             afterDocSize += JSON.stringify(docs).length;
